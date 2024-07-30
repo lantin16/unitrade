@@ -38,9 +38,14 @@ public class User implements Serializable {
     private String password;
 
     /**
-     * 注册手机号
+     * 手机号
      */
     private String phone;
+
+    /**
+     * 联系方式，如QQ、微信、邮箱等
+     */
+    private String contact;
 
     /**
      * 昵称，默认是随机字符

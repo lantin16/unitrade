@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.lantin.unitrade.enums.ItemStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -33,7 +34,7 @@ public class Item implements Serializable {
     private Long id;
 
     /**
-     * SKU名称
+     * 名称
      */
     private String name;
 
@@ -53,6 +54,11 @@ public class Item implements Serializable {
     private String image;
 
     /**
+     * 商品介绍，不要超过128个字符
+     */
+    private String introduce;
+
+    /**
      * 类目名称
      */
     private String category;
@@ -68,25 +74,15 @@ public class Item implements Serializable {
     private String spec;
 
     /**
-     * 销量
-     */
-    private Integer sold;
-
-    /**
      * 评论数
      */
     private Integer commentCount;
 
-    /**
-     * 是否是推广广告，true/false
-     */
-    @TableField("isAD")
-    private Boolean isAD;
 
     /**
-     * 商品状态 1-正常，2-下架，3-删除
+     * 商品状态 1-在售，2-交易中，3-交易完成，4-已下架
      */
-    private Integer status;
+    private ItemStatus status;
 
     /**
      * 创建时间
