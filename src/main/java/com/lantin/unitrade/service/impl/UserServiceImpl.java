@@ -142,7 +142,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = new User();
         user.setPhone(phone)
                 .setNickName(SystemConstants.USER_NICK_NAME_PREFIX + RandomUtil.randomString(10))
-                .setStatus(UserStatus.NORMAL)
+                .setStatus(UserStatus.NORMAL.getValue())
                 .setBalance(10000); // 测试就直接给10000元
 
         // 2. 保存用户到数据库

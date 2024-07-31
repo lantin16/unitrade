@@ -25,4 +25,17 @@ public enum Gender {
         this.desc = desc;
     }
 
+    public static Gender of(int value) {
+        if (value == 0) {
+            return UNKNOWN;
+        }
+        if (value == 1) {
+            return MALE;
+        }
+        if (value == 2) {
+            return FEMALE;
+        }
+        throw new BadRequestException("用户性别错误");
+    }
+
 }

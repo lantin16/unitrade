@@ -33,4 +33,11 @@ public enum UserStatus {
         }
         throw new BadRequestException("账户状态错误");
     }
+
+    public boolean equalsValue(Integer value){
+        if (value == null) {
+            return false;
+        }
+        return getValue() == value;
+    }
 }

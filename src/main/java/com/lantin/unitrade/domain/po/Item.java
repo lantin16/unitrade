@@ -82,7 +82,7 @@ public class Item implements Serializable {
     /**
      * 商品状态 1-在售，2-交易中，3-交易完成，4-已下架
      */
-    private ItemStatus status;
+    private Integer status;
 
     /**
      * 创建时间

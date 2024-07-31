@@ -20,9 +20,12 @@ spring:
         time-between-eviction-runs: 10s # 逐出连接的最小空闲时间
 mybatis-plus:
   configuration:
-    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler  # 枚举处理器
   global-config:
     db-config:
       update-strategy: not_null # 更新策略：非空字段才更新
       id-type: auto # 主键策略：自增
   type-aliases-package: com.lantin.unitrade.domain # 别名扫描包
+unitrade:
+  cart:
+    max-items : 10 # 购物车最大商品数量

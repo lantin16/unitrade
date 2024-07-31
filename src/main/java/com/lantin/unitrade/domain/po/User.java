@@ -75,7 +75,7 @@ public class User implements Serializable {
     /**
      * 性别，0：男，1：女
      */
-    private Gender gender;
+    private Integer gender;
 
     /**
      * 生日
@@ -90,7 +90,7 @@ public class User implements Serializable {
     /**
      * 使用状态（1正常 0冻结）
      */
-    private UserStatus status;
+    private Integer status;
 
     /**
      * 账户余额
