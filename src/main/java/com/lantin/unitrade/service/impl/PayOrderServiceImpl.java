@@ -11,7 +11,9 @@ import com.lantin.unitrade.enums.PayStatus;
 import com.lantin.unitrade.exception.BizIllegalException;
 import com.lantin.unitrade.mapper.PayOrderMapper;
 import com.lantin.unitrade.service.IPayOrderService;
+import com.lantin.unitrade.service.IUserService;
 import com.lantin.unitrade.utils.BeanUtils;
+import com.lantin.unitrade.utils.UserHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> implements IPayOrderService {
 
-    private final UserClient userClient;
+    private final IUserService userService;
 
     // private final TradeClient tradeClient;
 
@@ -45,7 +47,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
      * @param payOrderFormDTO
      */
     @Override
-    @GlobalTransactional
+    @Transactional
     public void tryPayOrderByBalance(PayOrderFormDTO payOrderFormDTO) {
         // 1.查询支付单
         PayOrder po = getById(payOrderFormDTO.getId());
@@ -159,7 +161,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         // 2.初始化数据
         payOrder.setPayOverTime(LocalDateTime.now().plusMinutes(120L));
         payOrder.setStatus(PayStatus.WAIT_BUYER_PAY.getValue());
-        payOrder.setBizUserId(UserContext.getUser());
+        payOrder.setBizUserId(UserHolder.getUser());
         return payOrder;
     }
     public PayOrder queryByBizOrderNo(Long bizOrderNo) {

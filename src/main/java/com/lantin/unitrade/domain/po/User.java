@@ -83,9 +83,9 @@ public class User implements Serializable {
     private LocalDate birthday;
 
     /**
-     * 评价（0~5星）
+     * 评分，1~5分，乘10保存，避免小数
      */
-    private Integer stars;
+    private Integer score;
 
     /**
      * 使用状态（1正常 0冻结）

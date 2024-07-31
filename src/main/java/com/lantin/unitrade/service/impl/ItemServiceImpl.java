@@ -14,16 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * <p>
- * 商品表 服务实现类
- * </p>
- *
- * @author 虎哥
- */
+
 @Service
 public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements IItemService {
 
+    /**
+     * 扣减库存
+     * 下单成功后，扣减库存
+     * @param items
+     */
     @Override
     @Transactional
     public void deductStock(List<OrderDetailDTO> items) {
