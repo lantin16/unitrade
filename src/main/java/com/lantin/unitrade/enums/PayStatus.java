@@ -14,7 +14,6 @@ public enum PayStatus {
     WAIT_BUYER_PAY(1, "待支付"),
     TRADE_CLOSED(2, "已关闭"),
     TRADE_SUCCESS(3, "支付成功"),
-    TRADE_FINISHED(3, "支付成功"),
     ;
     private final int value;
     private final String desc;

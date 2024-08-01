@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lantin.unitrade.constant.SystemConstants;
 import com.lantin.unitrade.domain.dto.LoginFormDTO;
@@ -12,14 +13,18 @@ import com.lantin.unitrade.domain.dto.UserDTO;
 import com.lantin.unitrade.domain.po.User;
 import com.lantin.unitrade.domain.po.UserInfo;
 import com.lantin.unitrade.enums.UserStatus;
+import com.lantin.unitrade.exception.BizIllegalException;
 import com.lantin.unitrade.mapper.UserMapper;
 import com.lantin.unitrade.service.IUserService;
+import com.lantin.unitrade.utils.PasswordEncoder;
 import com.lantin.unitrade.utils.RegexUtils;
 import com.lantin.unitrade.utils.UserHolder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -31,14 +36,15 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.lantin.unitrade.constant.RedisConstants.*;
+import static com.lantin.unitrade.constant.SystemConstants.PASSWORD_SALT;
 
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
     /**
      * 发送验证码
@@ -252,5 +258,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         info.setUpdateTime(null);
         // 返回
         return Result.ok(info);
+    }
+
+    /**
+     * 用户支付后扣减用户余额
+     * @param pw 用户支付时输入的密码
+     * @param totalFee
+     */
+    @Override
+    @Transactional
+    public void deductMoney(String pw, Integer totalFee) {
+        log.info("开始扣款");
+        // 1.校验密码
+        Long userId = UserHolder.getUser().getId();
+        User user = getById(userId);
+        if(user == null || !PasswordEncoder.matches(user.getPassword(), pw)){   // 比较数据库中的加密密码和用户输入的密码是否一致
+            // 密码错误
+            throw new BizIllegalException("用户密码错误");
+        }
+
+        // 2.尝试扣款
+        try {
+            baseMapper.updateMoney(userId, totalFee);
+        } catch (Exception e) {
+            throw new RuntimeException("扣款失败，可能是余额不足！", e);
+        }
+        log.info("扣款成功");
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    @Override
+    public void updateUser(User user) {
+        // 如果要更新的数据中包含密码，则需要加密再存储到数据库
+        if (StrUtil.isNotBlank(user.getPassword())) {
+            PasswordEncoder.encode(user.getPassword(), PASSWORD_SALT);
+        }
+        updateById(user);
     }
 }

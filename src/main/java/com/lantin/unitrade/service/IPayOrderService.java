@@ -2,6 +2,7 @@ package com.lantin.unitrade.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lantin.unitrade.domain.dto.PayApplyDTO;
+import com.lantin.unitrade.domain.dto.PayOrderDTO;
 import com.lantin.unitrade.domain.dto.PayOrderFormDTO;
 import com.lantin.unitrade.domain.po.PayOrder;
 
@@ -13,4 +14,6 @@ public interface IPayOrderService extends IService<PayOrder> {
     void tryPayOrderByBalance(PayOrderFormDTO payOrderFormDTO);
 
     void updateStatusByOrderId(Long orderId, Integer status);
+
+    PayOrderDTO queryPayOrderByBizOrderNo(Long id);
 }

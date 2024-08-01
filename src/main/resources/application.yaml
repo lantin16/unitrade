@@ -12,12 +12,18 @@ spring:
     host: 127.0.0.1
     port: 6379
     password: 730948
-    lettuce:  # 使用lettuce连接池
+    lettuce: # 使用lettuce连接池
       pool:
         max-active: 10  # 连接池最大连接数（使用负值表示没有限制）
         max-idle: 10  # 连接池中的最大空闲连接
         min-idle: 1 # 连接池中的最小空闲连接
         time-between-eviction-runs: 10s # 逐出连接的最小空闲时间
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672 # 端口，控制台启动容器后访问localhost:15672
+    virtual-host: /unitrade # 虚拟主机
+    username: lantin # 用户名
+    password: 123456 # 密码
 mybatis-plus:
   configuration:
     default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler  # 枚举处理器
@@ -28,4 +34,4 @@ mybatis-plus:
   type-aliases-package: com.lantin.unitrade.domain # 别名扫描包
 unitrade:
   cart:
-    max-items : 10 # 购物车最大商品数量
+    max-items: 10 # 购物车最大商品数量

@@ -18,4 +18,8 @@ public interface IUserService extends IService<User> {
     Result signCount();
 
     Result getUserInfo(Long userId);
+
+    void deductMoney(String pw, Integer totalFee);
+
+    void updateUser(User user);
 }

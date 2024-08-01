@@ -2,6 +2,7 @@ package com.lantin.unitrade.utils;
 
 
 import cn.hutool.core.util.RandomUtil;
+import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -14,16 +15,35 @@ import java.nio.charset.StandardCharsets;
 
 public class PasswordEncoder {
 
+    /**
+     * 对密码加密（生成随机盐）
+     * @param password
+     * @return
+     */
     public static String encode(String password) {
         // 生成盐
         String salt = RandomUtil.randomString(20);
         // 加密
         return encode(password,salt);
     }
-    private static String encode(String password, String salt) {
-        // 加密
+
+    /**
+     * 对密码加密（指定盐）
+     * @param password
+     * @param salt
+     * @return
+     */
+    public static String encode(String password, String salt) {
+        // 加密：生成盐 + @ + md5(密码 + 盐)
         return salt + "@" + DigestUtils.md5DigestAsHex((password + salt).getBytes(StandardCharsets.UTF_8));
     }
+
+    /**
+     * 比较密码是否匹配
+     * @param encodedPassword
+     * @param rawPassword
+     * @return
+     */
     public static Boolean matches(String encodedPassword, String rawPassword) {
         if (encodedPassword == null || rawPassword == null) {
             return false;

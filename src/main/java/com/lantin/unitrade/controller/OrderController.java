@@ -24,10 +24,15 @@ public class OrderController {
         return BeanUtils.copyBean(orderService.getById(orderId), OrderVO.class);
     }
 
-    @ApiOperation("创建订单")
+    /**
+     * 下单，具体是否能下单成功需要后续判断（库存等）
+     * @param orderFormDTO
+     * @return
+     */
+    @ApiOperation("下单")
     @PostMapping
-    public Long createOrder(@RequestBody OrderFormDTO orderFormDTO){
-        return orderService.createOrder(orderFormDTO);
+    public Long placeOrder(@RequestBody OrderFormDTO orderFormDTO){
+        return orderService.placeOrder(orderFormDTO);
     }
 
     /**

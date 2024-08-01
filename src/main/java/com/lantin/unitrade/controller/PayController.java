@@ -3,6 +3,7 @@ package com.lantin.unitrade.controller;
 import com.lantin.unitrade.domain.dto.PayApplyDTO;
 import com.lantin.unitrade.domain.dto.PayOrderDTO;
 import com.lantin.unitrade.domain.dto.PayOrderFormDTO;
+import com.lantin.unitrade.domain.dto.Result;
 import com.lantin.unitrade.domain.po.PayOrder;
 import com.lantin.unitrade.domain.vo.PayOrderVO;
 import com.lantin.unitrade.enums.PayType;
@@ -51,9 +52,8 @@ public class PayController {
 
     @ApiOperation("根据id查询支付单")
     @GetMapping("/biz/{id}")
-    public PayOrderDTO queryPayOrderByBizOrderNo(@PathVariable("id") Long id){
-        PayOrder payOrder = payOrderService.lambdaQuery().eq(PayOrder::getBizOrderNo, id).one();
-        return BeanUtils.copyBean(payOrder, PayOrderDTO.class);
+    public Result queryPayOrderByBizOrderNo(@PathVariable("id") Long id){
+        return Result.ok(payOrderService.queryPayOrderByBizOrderNo(id));
     }
 
 

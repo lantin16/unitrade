@@ -5,11 +5,15 @@ import cn.hutool.core.bean.BeanUtil;
 import com.lantin.unitrade.domain.dto.LoginFormDTO;
 import com.lantin.unitrade.domain.dto.Result;
 import com.lantin.unitrade.domain.dto.UserDTO;
+import com.lantin.unitrade.domain.po.Cart;
 import com.lantin.unitrade.domain.po.User;
 import com.lantin.unitrade.domain.po.UserInfo;
 import com.lantin.unitrade.service.IUserInfoService;
 import com.lantin.unitrade.service.IUserService;
 import com.lantin.unitrade.utils.UserHolder;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +71,16 @@ public class UserController {
         return Result.ok(user);
     }
 
+    @ApiOperation("扣减余额")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pw", value = "支付密码"),
+            @ApiImplicitParam(name = "amount", value = "支付金额")
+    })
+    @PutMapping("/money/deduct")
+    public void deductMoney(@RequestParam("pw") String pw,@RequestParam("amount") Integer amount){
+        userService.deductMoney(pw, amount);
+    }
+
 
     /**
      * 查询用户全部信息
@@ -98,6 +112,16 @@ public class UserController {
         UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
         // 返回
         return Result.ok(userDTO);
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    @ApiOperation("更新用户信息")
+    @PutMapping
+    public void updateCart(@RequestBody User user){
+        userService.updateUser(user);
     }
 
 

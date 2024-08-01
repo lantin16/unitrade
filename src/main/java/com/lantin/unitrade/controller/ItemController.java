@@ -2,10 +2,7 @@ package com.lantin.unitrade.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lantin.unitrade.domain.dto.ItemDTO;
-import com.lantin.unitrade.domain.dto.OrderDetailDTO;
-import com.lantin.unitrade.domain.dto.PageDTO;
-import com.lantin.unitrade.domain.dto.PageQuery;
+import com.lantin.unitrade.domain.dto.*;
 import com.lantin.unitrade.domain.po.Item;
 import com.lantin.unitrade.enums.ItemStatus;
 import com.lantin.unitrade.service.IItemService;
@@ -39,23 +36,23 @@ public class ItemController {
 
     @ApiOperation("根据id批量查询商品")
     @GetMapping
-    public List<ItemDTO> queryItemByIds(@RequestParam("ids") List<Long> ids){
+    public Result queryItemByIds(@RequestParam("ids") List<Long> ids){
         // 模拟业务延迟
         // ThreadUtil.sleep(500);
-        return itemService.queryItemByIds(ids);
+        return Result.ok(itemService.queryItemByIds(ids));
     }
 
     @ApiOperation("根据id查询商品")
     @GetMapping("{id}")
-    public ItemDTO queryItemById(@PathVariable("id") Long id) {
-        return BeanUtils.copyBean(itemService.getById(id), ItemDTO.class);
+    public Result queryItemById(@PathVariable("id") Long id) {
+        return Result.ok(itemService.queryItemById(id));
     }
 
     @ApiOperation("新增商品")
     @PostMapping
     public void saveItem(@RequestBody ItemDTO item) {
         // 新增
-        itemService.save(BeanUtils.copyBean(item, Item.class));
+        itemService.saveItem(item);
     }
 
     @ApiOperation("更新商品状态")
@@ -63,17 +60,17 @@ public class ItemController {
     public void updateItemStatus(@PathVariable("id") Long id, @PathVariable("status") Integer status){
         Item item = new Item();
         item.setId(id);
-        item.setStatus(ItemStatus.of(status));
+        item.setStatus(status);
         itemService.updateById(item);
     }
 
     @ApiOperation("更新商品")
     @PutMapping
-    public void updateItem(@RequestBody ItemDTO item) {
+    public Result updateItem(@RequestBody Item item) {
         // 不允许修改商品状态，所以强制设置为null，更新时，就会忽略该字段
         item.setStatus(null);
         // 更新
-        itemService.updateById(BeanUtils.copyBean(item, Item.class));
+        return itemService.update(item);
     }
 
     @ApiOperation("根据id删除商品")
