@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lantin.unitrade.domain.dto.Result;
+import com.lantin.unitrade.domain.dto.ScrollResult;
 import com.lantin.unitrade.domain.dto.UserDTO;
 import com.lantin.unitrade.domain.po.Blog;
 import com.lantin.unitrade.domain.po.User;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 
 import static com.lantin.unitrade.constant.MessageConstants.BLOG_NOT_EXIST;
 import static com.lantin.unitrade.constant.MessageConstants.DATABASE_ERROR;
-import static com.lantin.unitrade.constant.RedisConstants.BLOG_LIKED_KEY;
+import static com.lantin.unitrade.constant.RedisConstants.*;
 import static com.lantin.unitrade.constant.SystemConstants.MAX_PAGE_SIZE;
 
 
@@ -106,7 +107,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
 
 
     /**
-     * 点赞笔记
+     * 点赞帖子
+     * 重复点赞会取消已点的赞
      * @param id
      * @return
      */
@@ -182,8 +184,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
     }
 
     /**
-     * 保存探店笔记
-     * 同时将笔记id写入所有粉丝的收件箱（推模式）
+     * 保存帖子
+     * 同时将帖子id写入所有粉丝的收件箱（推模式），因为二手交易用户量较小，所以粉丝也不会太多，用推模式比较好
      * @param blog
      * @return
      */
@@ -281,7 +283,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
                     isBlogLiked(blog);
                 });
 
-        // 6. 封装结果并返回
+        // 7. 封装结果并返回
         ScrollResult result = ScrollResult.builder()
                 .list(blogs)
                 .minTime(minTime)

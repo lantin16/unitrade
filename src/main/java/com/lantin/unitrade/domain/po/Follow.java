@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * 粉丝实体表
+ * 用户可以关注其他卖家用户
  * @Author lantin
  * @Date 2024/7/31
  */

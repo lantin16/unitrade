@@ -1,4 +1,4 @@
-package com.lantin.unitrade.domain.po;
+package com.lantin.unitrade.domain.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,14 +8,13 @@ import java.time.LocalDateTime;
 
 /**
  * 与elasticsearch中商品索引库对应的实体类
- * TODO 字段修改
  * @Author lantin
- * @Date 2024/7/30
+ * @Date 2024/8/2
  */
 
 @Data
 @ApiModel(description = "商品索引库实体")
-public class ItemDoc{
+public class ItemDoc {
 
     @ApiModelProperty("商品id")
     private String id;
